@@ -194,7 +194,7 @@ function inicial() {
   const tipos = [...new Set(IMOVEIS.map((i) => i.tipo))];
   const desc = "Apartamentos, flats e casas à venda em Cabedelo e João Pessoa, perto do mar. Atendimento direto com a corretora Ana Dourado, CRECI PB 16673F.";
   return `${head({ titulo: "Ana Dourado · Imóveis perto do mar em Cabedelo e João Pessoa", desc, base: "",
-    extra: `<link rel="preload" as="image" href="img/ponta-de-campina-pe-na-areia/01.webp" media="(min-width:701px)"><link rel="preload" as="image" href="img/poco-camboinha/05-p.webp" media="(max-width:700px)">
+    extra: `<link rel="preload" as="image" href="img/topo-mar.webp" media="(min-width:701px)"><link rel="preload" as="image" href="img/poco-camboinha/05-p.webp" media="(max-width:700px)">
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "RealEstateAgent", name: "Ana Dourado · Imóveis Cabedelo e João Pessoa", description: desc, telephone: "+55 83 98631-4748", areaServed: ["Cabedelo, PB", "João Pessoa, PB"], sameAs: [ANA.instagram] })}</script>` })}
 <body class="tem-barra">
 ${topo("")}
@@ -202,7 +202,7 @@ ${topo("")}
 <section class="hero" data-topo>
   <picture>
     <source media="(max-width:700px)" srcset="img/poco-camboinha/05-p.webp">
-    <img src="img/ponta-de-campina-pe-na-areia/01.webp" alt="Piscinas de um condomínio à beira-mar em Ponta de Campina, Cabedelo" fetchpriority="high">
+    <img src="img/topo-mar.webp" alt="Piscinas de um condomínio à beira-mar em Ponta de Campina, Cabedelo" fetchpriority="high">
   </picture>
   <div class="wrap">
     <p class="kicker">Ana Dourado · Corretora de imóveis</p>
@@ -308,7 +308,7 @@ ${topo("")}
 
 <section class="sobre claro" id="sobre">
   <div class="wrap">
-    <div class="retrato"><img src="img/ana.webp" alt="Ana Cláudia Dourado, corretora de imóveis em Cabedelo e João Pessoa" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 30%"></div>
+    <div class="retrato"><img src="img/ana-retrato.webp" alt="Ana Cláudia Dourado, corretora de imóveis em Cabedelo e João Pessoa" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 30%"></div>
     <div>
       <p class="kicker">Quem vai te atender</p>
       <h2>Ana Cláudia <em>Dourado</em></h2>
@@ -394,7 +394,7 @@ ${topo(base)}
       </form>
       <div class="ok" id="visita-ok" hidden><h3>Combinado, <span data-nome>obrigado</span>!</h3><p>A Ana vai chamar você no WhatsApp para marcar o melhor horário.</p></div>
     </div>
-    <div class="corretora"><img class="av" src="${base}img/ana-av.webp" alt="" style="width:52px;height:52px;object-fit:cover"><span><b>${ANA.nome}</b><span>Corretora · ${ANA.creci}</span></span></div>
+    <div class="corretora"><img class="av" src="${base}img/ana-rosto.webp" alt="" style="width:52px;height:52px;object-fit:cover"><span><b>${ANA.nome}</b><span>Corretora · ${ANA.creci}</span></span></div>
   </aside>
 </div>
 
