@@ -308,7 +308,7 @@ ${topo("")}
 
 <section class="sobre claro" id="sobre">
   <div class="wrap">
-    <div class="retrato" role="img" aria-label="Espaço para a foto da Ana Dourado"><span class="mono">AD</span><small>foto da Ana (a receber em alta)</small></div>
+    <div class="retrato"><img src="img/ana.webp" alt="Ana Cláudia Dourado, corretora de imóveis em Cabedelo e João Pessoa" loading="lazy" width="643" height="638"></div>
     <div>
       <p class="kicker">Quem vai te atender</p>
       <h2>Ana Cláudia <em>Dourado</em></h2>
@@ -394,7 +394,7 @@ ${topo(base)}
       </form>
       <div class="ok" id="visita-ok" hidden><h3>Combinado, <span data-nome>obrigado</span>!</h3><p>A Ana vai chamar você no WhatsApp para marcar o melhor horário.</p></div>
     </div>
-    <div class="corretora"><span class="av">AD</span><span><b>${ANA.nome}</b><span>Corretora · ${ANA.creci}</span></span></div>
+    <div class="corretora"><img class="av" src="${base}img/ana-av.webp" alt="" width="52" height="52"><span><b>${ANA.nome}</b><span>Corretora · ${ANA.creci}</span></span></div>
   </aside>
 </div>
 

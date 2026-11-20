@@ -247,3 +247,5 @@ footer .rascunho{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.1);padd
 .convite p{margin:0;color:rgba(255,255,255,.78);max-width:460px}
 .convite .btn{align-self:flex-start}
 .migalha a{display:inline-flex;align-items:center;min-height:40px}
+.retrato img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.corretora img.av{object-fit:cover}
