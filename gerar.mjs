@@ -112,7 +112,7 @@ function head({ titulo, desc, base, extra = "" }) {
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Jost:wght@300;400;500&display=optional" rel="stylesheet">
-<link rel="stylesheet" href="${base}assets/estilo.css">
+<link rel="stylesheet" href="${base}assets/estilo.css?v=3">
 <script>
   /* Configuração de rastreio e contato. IDs de Pixel/GA4/Ads são públicos; nunca coloque senha ou token aqui. */
   window.SITE = {
@@ -129,7 +129,7 @@ function head({ titulo, desc, base, extra = "" }) {
   };
 </script>
 <script src="${base}assets/site.js" defer></script>
-<script src="${base}assets/imoveis.js" defer></script>
+<script src="${base}assets/imoveis.js?v=3" defer></script>
 ${extra}
 </head>`;
 }
@@ -308,7 +308,7 @@ ${topo("")}
 
 <section class="sobre claro" id="sobre">
   <div class="wrap">
-    <div class="retrato"><img src="img/ana.webp" alt="Ana Cláudia Dourado, corretora de imóveis em Cabedelo e João Pessoa" loading="lazy" width="643" height="638"></div>
+    <div class="retrato"><img src="img/ana.webp" alt="Ana Cláudia Dourado, corretora de imóveis em Cabedelo e João Pessoa" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 25%"></div>
     <div>
       <p class="kicker">Quem vai te atender</p>
       <h2>Ana Cláudia <em>Dourado</em></h2>
@@ -394,7 +394,7 @@ ${topo(base)}
       </form>
       <div class="ok" id="visita-ok" hidden><h3>Combinado, <span data-nome>obrigado</span>!</h3><p>A Ana vai chamar você no WhatsApp para marcar o melhor horário.</p></div>
     </div>
-    <div class="corretora"><img class="av" src="${base}img/ana-av.webp" alt="" width="52" height="52"><span><b>${ANA.nome}</b><span>Corretora · ${ANA.creci}</span></span></div>
+    <div class="corretora"><img class="av" src="${base}img/ana-av.webp" alt="" style="width:52px;height:52px;object-fit:cover"><span><b>${ANA.nome}</b><span>Corretora · ${ANA.creci}</span></span></div>
   </aside>
 </div>
 
