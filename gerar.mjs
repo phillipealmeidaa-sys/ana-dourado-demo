@@ -164,7 +164,7 @@ function rodape(base) {
       <a href="${base}privacidade.html">Política de privacidade</a><br>
       <a href="#" data-cookies>Preferências de cookies</a>
     </div>
-    <p class="rascunho">Rascunho para aprovação. Valores e características conforme as fichas da corretora, sujeitos a alteração sem aviso. Fotos dos próprios imóveis.</p>
+    <p class="rascunho">Rascunho para aprovação. Valores e características conforme as fichas da corretora, sujeitos a alteração sem aviso. Fotos dos próprios imóveis; foto do topo: Unsplash.</p>
   </div>
 </footer>`;
 }
@@ -194,15 +194,15 @@ function inicial() {
   const tipos = [...new Set(IMOVEIS.map((i) => i.tipo))];
   const desc = "Apartamentos, flats e casas à venda em Cabedelo e João Pessoa, perto do mar. Atendimento direto com a corretora Ana Dourado, CRECI PB 16673F.";
   return `${head({ titulo: "Ana Dourado · Imóveis perto do mar em Cabedelo e João Pessoa", desc, base: "",
-    extra: `<link rel="preload" as="image" href="img/topo-mar.webp" media="(min-width:701px)"><link rel="preload" as="image" href="img/poco-camboinha/05-p.webp" media="(max-width:700px)">
+    extra: `<link rel="preload" as="image" href="img/topo-orla-1600.webp" imagesrcset="img/topo-orla-1600.webp 1600w, img/topo-orla.webp 2400w" imagesizes="100vw" media="(min-width:701px)"><link rel="preload" as="image" href="img/topo-orla-celular.webp" media="(max-width:700px)">
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "RealEstateAgent", name: "Ana Dourado · Imóveis Cabedelo e João Pessoa", description: desc, telephone: "+55 83 98631-4748", areaServed: ["Cabedelo, PB", "João Pessoa, PB"], sameAs: [ANA.instagram] })}</script>` })}
 <body class="tem-barra">
 ${topo("")}
 <main>
 <section class="hero" data-topo>
   <picture>
-    <source media="(max-width:700px)" srcset="img/poco-camboinha/05-p.webp">
-    <img src="img/topo-mar.webp" alt="Piscinas de um condomínio à beira-mar em Ponta de Campina, Cabedelo" fetchpriority="high">
+    <source media="(max-width:700px)" srcset="img/topo-orla-celular.webp">
+    <img src="img/topo-orla-1600.webp" srcset="img/topo-orla-1600.webp 1600w, img/topo-orla.webp 2400w" sizes="100vw" alt="Vista de drone da orla de João Pessoa, com os prédios e o mar" fetchpriority="high">
   </picture>
   <div class="wrap">
     <p class="kicker">Ana Dourado · Corretora de imóveis</p>
