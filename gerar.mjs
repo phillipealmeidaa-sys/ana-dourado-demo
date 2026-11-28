@@ -11,7 +11,20 @@ const ANA = {
 };
 
 // capa = número da foto que abre a galeria. preco = null quando a ficha não traz o valor.
+const SITE_URL = "https://anadourado.com.br/";
 const IMOVEIS = [
+  { slug: "cobertura-cabo-branco", tipo: "Cobertura", bairro: "Cabo Branco", cidade: "João Pessoa", preco: null, area: 245, quartos: 3, suites: 3, mar: "Vista para o mar", capa: 7, video: "cobertura-cabo-branco",
+    titulo: "Cobertura linear na Avenida Cabo Branco", chamada: "245 m², piscina exclusiva e vista para o mar de todos os quartos",
+    texto: "Cobertura linear de 245 m² na Avenida Cabo Branco, com 3 suítes, lavabo e vista para o mar de todos os quartos. O hall é privativo e tem uma porta direta para a área gourmet: numa festa, quem trabalha passa sem entrar na casa. A área gourmet tem cozinha completa com churrasqueira e se abre para a piscina exclusiva, com cascata. A cozinha principal também é completa e bem ventilada.",
+    detalhes: ["3 suítes, todas com vista para o mar", "Lavabo", "Cobertura linear, em um andar só", "Hall privativo", "Cozinha principal completa e ventilada", "DCE completo"],
+    lazer: ["Piscina exclusiva com cascata", "Área gourmet com cozinha completa", "Churrasqueira", "Área aberta com vista para o mar"],
+    local: "Na Avenida Cabo Branco, em João Pessoa/PB, com vista para o mar do Cabo Branco.", tags: "alto" },
+  { slug: "apto-intermares-elevador", tipo: "Apartamento", bairro: "Intermares", cidade: "Cabedelo", preco: 550000, area: 93, vagas: 1, mar: "", capa: 1, video: "apto-intermares-elevador",
+    titulo: "Apartamento com elevador em Intermares", chamada: "93 m² com piscina no terraço do prédio",
+    texto: "Apartamento de 93 m² em Intermares, em Cabedelo, com bom espaço interno, 1 vaga de garagem e elevador. O prédio tem piscina no terraço. Fica perto de academias, praças, padarias, da BR e de outros serviços.",
+    detalhes: ["93 m² de área", "1 vaga de garagem", "Prédio com elevador", "Bom espaço interno"],
+    lazer: ["Piscina", "Elevador"],
+    local: "Intermares, em Cabedelo/PB, perto de academias, praças, BR, padarias e outros serviços.", tags: "ate800" },
   { slug: "ponta-de-campina-pe-na-areia", tipo: "Apartamento", bairro: "Ponta de Campina", cidade: "Cabedelo", preco: 3000000, area: 128, quartos: 3, suites: 3, vagas: 2, mar: "Pé na areia", capa: 1,
     titulo: "Apartamento pé na areia em Ponta de Campina", chamada: "Mobiliado em alto padrão, com estrutura de resort",
     texto: "Apartamento de 128 m² com 3 suítes, pé na areia em Ponta de Campina. Vem totalmente mobiliado, com mobília de alto padrão e móveis planejados Bom Tempo. O condomínio tem estrutura de resort, com piscina, academia e lazer completo.",
@@ -79,6 +92,7 @@ const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").
 const reais = (n) => n == null ? "Consulte o valor" : n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 const nfotos = (s) => fs.readdirSync(path.join(raiz, "img", s)).filter((f) => /^\d+\.webp$/.test(f)).length;
 const ordemFotos = (im) => { const n = nfotos(im.slug), l = [im.capa]; for (let i = 1; i <= n; i++) if (i !== im.capa) l.push(i); return l; };
+const valor = (im) => (im.apartir && im.preco != null ? "A partir de " : "") + reais(im.preco);
 const num = (i) => String(i).padStart(2, "0");
 const quartosTxt = (im) => im.quartos ? `${im.quartos} quartos${im.suites ? ` (${im.suites === im.quartos ? "todos suítes" : im.suites + (im.suites > 1 ? " suítes" : " suíte")})` : ""}` : "";
 const zap = (msg) => `https://wa.me/${ANA.whatsapp}?text=${encodeURIComponent(msg)}`;
@@ -97,7 +111,8 @@ const ICONES = `<svg width="0" height="0" style="position:absolute" aria-hidden=
 const ico = (n) => `<svg class="ico"><use href="#i-${n}"/></svg>`;
 const ZAPSVG = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>`;
 
-function head({ titulo, desc, base, extra = "" }) {
+function head({ titulo, desc, base, extra = "", caminho = "" }) {
+  const canonical = SITE_URL + caminho;
   return `<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -105,20 +120,24 @@ function head({ titulo, desc, base, extra = "" }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(titulo)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="robots" content="noindex, nofollow"><!-- RASCUNHO: tirar o noindex quando a Ana aprovar e o domínio estiver pronto -->
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="${canonical}">
+<meta property="og:url" content="${canonical}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
 <meta name="theme-color" content="#0F2C3A">
 <meta property="og:title" content="${esc(titulo)}">
 <meta property="og:description" content="${esc(desc)}">
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Jost:wght@300;400;500&display=optional" rel="stylesheet">
-<link rel="stylesheet" href="${base}assets/estilo.css?v=6">
+<link rel="stylesheet" href="${base}assets/estilo.css?v=9">
 <script>
   /* Configuração de rastreio e contato. IDs de Pixel/GA4/Ads são públicos; nunca coloque senha ou token aqui. */
   window.SITE = {
     META_PIXEL_ID: "",          // preencher quando a campanha estiver pronta
     GA4_ID: "",
-    GOOGLE_ADS_ID: "",
+    GOOGLE_ADS_ID: "AW-17138144727", // tag que já estava no site antigo dela (Hostinger)
     ADS_LEAD_LABEL: "",
     ADS_WHATSAPP_LABEL: "",
     WHATSAPP: "${ANA.whatsapp}",
@@ -129,7 +148,7 @@ function head({ titulo, desc, base, extra = "" }) {
   };
 </script>
 <script src="${base}assets/site.js" defer></script>
-<script src="${base}assets/imoveis.js?v=6" defer></script>
+<script src="${base}assets/imoveis.js?v=9" defer></script>
 ${extra}
 </head>`;
 }
@@ -162,9 +181,10 @@ function rodape(base) {
     </div>
     <div>
       <a href="${base}privacidade.html">Política de privacidade</a><br>
-      <a href="#" data-cookies>Preferências de cookies</a>
+      <a href="#" data-cookies>Preferências de cookies</a><br>
+      <a href="https://creci-pb.gov.br/canal-do-cidadao/pesquisa-de-corretores-credenciados/" target="_blank" rel="noopener">Consulte o CRECI da Ana</a>
     </div>
-    <p class="rascunho">Rascunho para aprovação. Valores e características conforme as fichas da corretora, sujeitos a alteração sem aviso. Fotos dos próprios imóveis; foto do topo: Unsplash.</p>
+    <p class="rascunho">Valores e características sujeitos a alteração sem aviso. Foto do topo: Unsplash. © 2026 Ana Dourado, corretora de imóveis.</p>
   </div>
 </footer>`;
 }
@@ -173,17 +193,17 @@ function card(im, base) {
   const f = num(im.capa);
   const ficha = [
     `<span>${ico("area")}${im.area} m²</span>`,
-    im.quartos ? `<span>${ico("cama")}${im.quartos} quartos</span>` : `<span>${ico("cama")}Studio</span>`,
+    im.quartos ? `<span>${ico("cama")}${im.quartos} quartos</span>` : (im.tipo === "Flat" ? `<span>${ico("cama")}Studio</span>` : ""),
     im.suites ? `<span>${ico("suite")}${im.suites} ${im.suites > 1 ? "suítes" : "suíte"}</span>` : "",
-    `<span>${ico("carro")}${im.vagas} ${im.vagas > 1 ? "vagas" : "vaga"}</span>`,
+    im.vagas ? `<span>${ico("carro")}${im.vagas} ${im.vagas > 1 ? "vagas" : "vaga"}</span>` : "",
   ].join("");
   return `<a class="card" href="${base}imoveis/${im.slug}.html" data-preco="${im.preco ?? ""}" data-bairro="${esc(im.bairro)}" data-tipo="${im.tipo}" data-tags="${im.tags}">
-      <div class="foto"><img src="${base}img/${im.slug}/${f}-p.webp" alt="${esc(im.titulo)}" loading="lazy" width="720" height="540">${im.mar ? `<span class="selo">${esc(im.mar)}</span>` : ""}</div>
+      <div class="foto"><img src="${base}img/${im.slug}/${f}-p.webp" alt="${esc(im.titulo)}" loading="lazy" width="720" height="540">${im.mar ? `<span class="selo">${esc(im.mar)}</span>` : ""}${im.video ? `<span class="tem-video">▶ Tem vídeo</span>` : ""}</div>
       <div class="info">
         <span class="onde">${esc(im.tipo)} · ${esc(im.bairro)}, ${esc(im.cidade)}</span>
         <h3>${esc(im.chamada)}</h3>
         <div class="fichinha">${ficha}</div>
-        <div class="preco"><b>${reais(im.preco)}</b><span>Ver imóvel →</span></div>
+        <div class="preco"><b>${valor(im)}</b><span>Ver imóvel →</span></div>
       </div>
     </a>`;
 }
@@ -193,7 +213,7 @@ function inicial() {
   const bairros = [...new Set(IMOVEIS.map((i) => i.bairro))].sort((a, b) => a.localeCompare(b, "pt-BR"));
   const tipos = [...new Set(IMOVEIS.map((i) => i.tipo))];
   const desc = "Apartamentos, flats e casas à venda em Cabedelo e João Pessoa, perto do mar. Atendimento direto com a corretora Ana Dourado, CRECI PB 16673F.";
-  return `${head({ titulo: "Ana Dourado · Imóveis perto do mar em Cabedelo e João Pessoa", desc, base: "",
+  return `${head({ titulo: "Ana Dourado · Imóveis perto do mar em Cabedelo e João Pessoa", desc, base: "", caminho: "",
     extra: `<link rel="preload" as="image" href="img/topo-orla-1600.webp" imagesrcset="img/topo-orla-1600.webp 1600w, img/topo-orla.webp 2400w" imagesizes="100vw" media="(min-width:701px)"><link rel="preload" as="image" href="img/topo-orla-celular.webp" media="(max-width:700px)">
 <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "RealEstateAgent", name: "Ana Dourado · Imóveis Cabedelo e João Pessoa", description: desc, telephone: "+55 83 98631-4748", areaServed: ["Cabedelo, PB", "João Pessoa, PB"], sameAs: [ANA.instagram] })}</script>` })}
 <body class="tem-barra">
@@ -220,7 +240,8 @@ ${topo("")}
     <form id="busca" role="search" aria-label="Buscar imóveis">
       <div><label for="b-bairro">Bairro</label><select id="b-bairro" name="bairro"><option value="">Todos os bairros</option>${bairros.map((b) => `<option>${esc(b)}</option>`).join("")}</select></div>
       <div><label for="b-tipo">Tipo</label><select id="b-tipo" name="tipo"><option value="">Todos os tipos</option>${tipos.map((t) => `<option>${t}</option>`).join("")}</select></div>
-      <div><label for="b-ate">Valor até</label><select id="b-ate" name="ate"><option value="">Qualquer valor</option><option value="400000">R$ 400 mil</option><option value="800000">R$ 800 mil</option><option value="1500000">R$ 1,5 milhão</option><option value="3000000">R$ 3 milhões</option></select></div>
+      <div><label for="b-de">Valor de</label><select id="b-de" name="de"><option value="">R$ 0</option><option value="300000">R$ 300 mil</option><option value="500000">R$ 500 mil</option><option value="800000">R$ 800 mil</option><option value="1000000">R$ 1 milhão</option><option value="1500000">R$ 1,5 milhão</option><option value="2000000">R$ 2 milhões</option></select></div>
+      <div><label for="b-ate">Valor até</label><select id="b-ate" name="ate"><option value="">Sem limite</option><option value="400000">R$ 400 mil</option><option value="800000">R$ 800 mil</option><option value="1000000">R$ 1 milhão</option><option value="1500000">R$ 1,5 milhão</option><option value="2000000">R$ 2 milhões</option><option value="3000000">R$ 3 milhões</option></select></div>
       <button class="btn btn-mar" type="submit">Buscar imóveis</button>
     </form>
   </div>
@@ -229,10 +250,10 @@ ${topo("")}
 <div class="provas">
   <div class="wrap">
     <ul>
-      <li><b>${IMOVEIS.length} <em>imóveis</em></b><span>selecionados à venda</span></li>
+      <li><b>630<em>+</em></b><span>clientes satisfeitos</span></li>
       <li><b>Cabedelo <em>e</em> JP</b><span>Ponta de Campina, Camboinha e outras praias</span></li>
       <li><b>1º <em>lugar</em></b><span>em VGC entre os agentes single da RE/MAX na Paraíba, 1º tri/2026</span></li>
-      <li><b>CRECI</b><span>PB 16673F</span></li>
+      <li><b>200<em>+</em></b><span>imóveis de qualidade</span></li>
     </ul>
   </div>
 </div>
@@ -322,6 +343,16 @@ ${topo("")}
     </div>
   </div>
 </section>
+
+<section class="depoimentos" id="avaliacoes">
+  <div class="wrap">
+    <div class="cab"><div><p class="kicker">Avaliações</p><h2>O que os clientes <em>dizem</em></h2></div></div>
+    <div class="dep-grade">
+      <figure class="dep"><div class="estrelas" aria-label="5 estrelas">★★★★★</div><blockquote>A Ana é muito confiável e resolutiva. Nos ajudou a encontrar o imóvel que procurávamos. Recomendo!</blockquote><figcaption><b>Elizete Estevam</b></figcaption></figure>
+      <figure class="dep"><div class="estrelas" aria-label="5 estrelas">★★★★★</div><blockquote>O atendimento foi ótimo! A Ana realmente conhece o mercado imobiliário e encontrou o apê perfeito.</blockquote><figcaption><b>Ludmila Andrade</b><span>João Pessoa</span></figcaption></figure>
+    </div>
+  </div>
+</section>
 </main>
 ${rodape("")}
 <a class="zap-flutuante" href="#encomende" data-whatsapp data-local="flutuante" aria-label="Falar com a Ana no WhatsApp"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true">${ZAPSVG.replace(/^<svg[^>]*>|<\/svg>$/g, "")}</svg></a>
@@ -334,14 +365,14 @@ ${rodape("")}
 /* ---------- página do imóvel ---------- */
 function pagina(im) {
   const fotos = ordemFotos(im), base = "../", total = fotos.length;
-  const msgVisita = `Olá, Ana! Vi no site o imóvel "${im.titulo}" (${reais(im.preco)}) e quero agendar uma visita.`;
-  const desc = `${im.titulo}, ${im.cidade}/PB: ${im.area} m²${im.quartos ? ", " + quartosTxt(im) : ""}, ${im.vagas} ${im.vagas > 1 ? "vagas" : "vaga"}. ${reais(im.preco)}. Agende sua visita com a corretora Ana Dourado.`;
+  const msgVisita = `Olá, Ana! Vi no site o imóvel "${im.titulo}" (${valor(im)}) e quero agendar uma visita.`;
+  const desc = `${im.titulo}, ${im.cidade}/PB: ${im.area} m²${im.quartos ? ", " + quartosTxt(im) : ""}${im.vagas ? `, ${im.vagas} ${im.vagas > 1 ? "vagas" : "vaga"}` : ""}. ${valor(im)}. Agende sua visita com a corretora Ana Dourado.`;
   const ficha = [
     [ "area", `${im.area} m²`, im.terreno ? "construídos" : "de área" ],
     im.terreno ? [ "terreno", `${im.terreno} m²`, "de terreno" ] : null,
-    im.quartos ? [ "cama", `${im.quartos}`, "quartos" ] : [ "cama", "Studio", "mobiliado" ],
+    im.quartos ? [ "cama", `${im.quartos}`, "quartos" ] : (im.tipo === "Flat" ? [ "cama", "Studio", "mobiliado" ] : null),
     im.suites ? [ "suite", `${im.suites}`, im.suites > 1 ? "suítes" : "suíte" ] : null,
-    [ "carro", `${im.vagas}`, im.vagas > 1 ? "vagas" : "vaga" ],
+    im.vagas ? [ "carro", `${im.vagas}`, im.vagas > 1 ? "vagas" : "vaga" ] : null,
     im.mar ? [ "onda", im.mar.replace(/ d[ao] (mar|praia|orla)$/, ""), /^\d/.test(im.mar) ? im.mar.replace(/^\d+ m /, "") : "localização" ] : null,
   ].filter(Boolean).map(([i, b, s]) => `<div>${ico(i)}<span><b>${esc(b)}</b>${esc(s)}</span></div>`).join("");
   const galeria = fotos.slice(0, 5).map((n, k) => `<button type="button" data-abre="${k}" aria-label="Ampliar foto ${k + 1} de ${total}"><img src="${base}img/${im.slug}/${num(n)}${k === 0 ? "" : "-p"}.webp"${k === 0 ? ` srcset="${base}img/${im.slug}/${num(n)}-p.webp 720w, ${base}img/${im.slug}/${num(n)}.webp 1600w" sizes="(max-width:760px) 86vw, 60vw" fetchpriority="high"` : ` loading="lazy"`} alt="${esc(im.titulo)}, foto ${k + 1}"></button>`).join("")
@@ -354,7 +385,7 @@ function pagina(im) {
     about: { "@type": im.tipo === "Casa" ? "SingleFamilyResidence" : "Apartment", floorSize: { "@type": "QuantitativeValue", value: im.area, unitCode: "MTK" }, numberOfRooms: im.quartos || undefined,
       address: { "@type": "PostalAddress", addressLocality: im.cidade, addressRegion: "PB", addressCountry: "BR", streetAddress: im.bairro } },
     offers: im.preco ? { "@type": "Offer", price: im.preco, priceCurrency: "BRL" } : undefined };
-  return `${head({ titulo: `${im.titulo} | Ana Dourado`, desc, base, extra: `<script type="application/ld+json">${JSON.stringify(schema)}</script>
+  return `${head({ titulo: `${im.titulo} | Ana Dourado`, desc, base, caminho: `imoveis/${im.slug}.html`, extra: `<script type="application/ld+json">${JSON.stringify(schema)}</script>
 <style>@media (min-width:761px){.so-celular{display:none!important}}</style>` })}
 <body class="tem-barra">
 ${topo(base)}
@@ -363,7 +394,7 @@ ${topo(base)}
   <nav class="migalha" aria-label="Você está em"><a href="${base}./">Início</a> › <a href="${base}./#imoveis">Imóveis</a> › ${esc(im.cidade)} › ${esc(im.bairro)}</nav>
   <div class="titulo-imovel">
     <div><p class="onde">${esc(im.tipo)} à venda · ${esc(im.bairro)}, ${esc(im.cidade)}/PB</p><h1>${esc(im.titulo)}</h1></div>
-    <div class="valor"><small>Valor</small><b>${reais(im.preco)}</b></div>
+    <div class="valor"><small>Valor</small><b>${valor(im)}</b></div>
   </div>
   <div class="galeria-caixa"><div class="galeria">${galeria}${mobileExtra}</div><button type="button" class="todas" data-abre="0">${ico("foto")}Ver as ${total} fotos</button></div>
 </div>
@@ -371,6 +402,7 @@ ${topo(base)}
 <div class="wrap corpo">
   <div>
     <div class="ficha">${ficha}</div>
+    ${im.video ? `<div class="bloco"><h2>Vídeo do imóvel</h2><video class="video-imovel" controls playsinline preload="none" poster="${base}video/${im.video}.webp"><source src="${base}video/${im.video}.mp4" type="video/mp4">Seu navegador não abre o vídeo.</video></div>` : ""}
     <div class="bloco"><h2>Sobre o imóvel</h2><p>${esc(im.texto)}</p></div>
     <div class="bloco"><h2>Detalhes</h2><ul class="lista">${im.detalhes.map((d) => `<li>${ico("check")}<span>${esc(d)}</span></li>`).join("")}</ul></div>
     <div class="bloco"><h2>Lazer e comodidades</h2><ul class="lista">${im.lazer.map((d) => `<li>${ico("check")}<span>${esc(d)}</span></li>`).join("")}</ul></div>
@@ -380,10 +412,10 @@ ${topo(base)}
   </div>
   <aside class="lado" data-esconde-barra>
     <div class="cartao">
-      <div class="valor"><small>Valor de venda</small><b>${reais(im.preco)}</b><span>${esc(im.tipo)} · ${im.area} m² · ${esc(im.bairro)}</span></div>
+      <div class="valor"><small>Valor de venda</small><b>${valor(im)}</b><span>${esc(im.tipo)} · ${im.area} m² · ${esc(im.bairro)}</span></div>
       <a class="btn btn-ouro" href="#agendar" data-whatsapp="${esc(msgVisita)}" data-local="cartao">${ZAPSVG}Agendar visita no WhatsApp</a>
       <p class="ou">ou peça para a Ana te chamar</p>
-      <form id="agendar" data-lead="visita" data-ok="visita-ok" data-whatsapp-intro="${esc(`Olá, Ana! Quero agendar uma visita: ${im.titulo} (${reais(im.preco)}).`)}">
+      <form id="agendar" data-lead="visita" data-ok="visita-ok" data-whatsapp-intro="${esc(`Olá, Ana! Quero agendar uma visita: ${im.titulo} (${valor(im)}).`)}">
         <div><label for="v-nome">Seu nome</label><input id="v-nome" name="nome" autocomplete="name" required data-msg="Escreva seu nome."></div>
         <div><label for="v-zap">WhatsApp com DDD</label><input id="v-zap" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000" required data-msg="Escreva seu WhatsApp com DDD."></div>
         <input type="hidden" name="imovel" value="${esc(im.titulo)}">
@@ -411,7 +443,7 @@ ${rodape(base)}
   <div class="trilho">${visor}</div>
   <button type="button" class="seta ant" aria-label="Foto anterior">‹</button><button type="button" class="seta prox" aria-label="Próxima foto">›</button>
 </div>
-<div class="barra" data-barra-fixa><span class="v">Valor<b>${reais(im.preco)}</b></span><a class="btn btn-ouro" href="#agendar" data-whatsapp="${esc(msgVisita)}" data-local="barra">${ZAPSVG}Agendar visita</a></div>
+<div class="barra" data-barra-fixa><span class="v">Valor<b>${valor(im)}</b></span><a class="btn btn-ouro" href="#agendar" data-whatsapp="${esc(msgVisita)}" data-local="barra">${ZAPSVG}Agendar visita</a></div>
 </body>
 </html>
 `;
@@ -420,5 +452,5 @@ ${rodape(base)}
 fs.mkdirSync(path.join(raiz, "imoveis"), { recursive: true });
 fs.writeFileSync(path.join(raiz, "index.html"), inicial());
 for (const im of IMOVEIS) fs.writeFileSync(path.join(raiz, "imoveis", im.slug + ".html"), pagina(im));
-fs.writeFileSync(path.join(raiz, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>./</loc></url>\n${IMOVEIS.map((i) => `<url><loc>imoveis/${i.slug}.html</loc></url>`).join("\n")}\n</urlset>\n`);
+fs.writeFileSync(path.join(raiz, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${SITE_URL}</loc></url>\n${IMOVEIS.map((i) => `<url><loc>${SITE_URL}imoveis/${i.slug}.html</loc></url>`).join("\n")}\n</urlset>\n`);
 console.log(`Gerado: index.html + ${IMOVEIS.length} páginas de imóvel.`);

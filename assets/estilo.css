@@ -56,7 +56,7 @@ h1 em,h2 em,h3 em{font-family:var(--serifa);font-style:italic;font-weight:500;co
 
 /* busca */
 .busca{position:relative;z-index:5;margin-top:-92px}
-.busca form{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);padding:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:12px;align-items:end}
+.busca form{background:var(--branco);border-radius:var(--raio);box-shadow:var(--sombra);padding:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:12px;align-items:end}
 .busca label{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--suave);margin:0 0 6px 4px}
 .busca select{width:100%;min-height:50px;border:1px solid var(--linha);border-radius:12px;background:#fff;padding:0 14px;font:400 16px var(--titulo);color:var(--texto)}
 .busca .btn{min-height:50px}
@@ -249,3 +249,14 @@ footer .rascunho{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.1);padd
 .migalha a{display:inline-flex;align-items:center;min-height:40px}
 .retrato img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .corretora img.av{object-fit:cover}
+@media (max-width:860px){.busca form>div:nth-child(2){grid-column:1/-1}}
+.video-imovel{display:block;width:100%;max-width:420px;aspect-ratio:9/16;max-height:80vh;border-radius:var(--raio);background:#0B222D;object-fit:contain}
+.card .tem-video{position:absolute;right:12px;bottom:12px;background:rgba(15,44,58,.88);color:#fff;font-size:12px;padding:5px 10px;border-radius:999px}
+.depoimentos{background:var(--branco)}
+.dep-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.dep{margin:0;background:var(--areia);border:1px solid var(--linha);border-radius:var(--raio);padding:28px}
+.dep .estrelas{color:var(--dourado);letter-spacing:3px;font-size:18px}
+.dep blockquote{margin:12px 0 16px;font:italic 500 24px/1.35 var(--serifa);color:var(--mar)}
+.dep figcaption b{display:block;font-weight:500}
+.dep figcaption span{font-size:14px;color:var(--suave)}
+@media (max-width:760px){.dep-grade{grid-template-columns:minmax(0,1fr)}}

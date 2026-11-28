@@ -4,7 +4,7 @@
   var grade = document.getElementById("grade");
   if (grade) {
     var cards = Array.prototype.slice.call(grade.querySelectorAll(".card"));
-    var f = { bairro: "", tipo: "", ate: "", atalho: "", ordem: "" };
+    var f = { bairro: "", tipo: "", de: "", ate: "", atalho: "", ordem: "" };
     var nomes = { mar: "Pé na areia e até 200 m do mar", flat: "Flats para investir", ate800: "Até R$ 800 mil", alto: "Alto padrão" };
     var convite = document.getElementById("convite"), visiveis = 0;
     // O convite ocupa o espaço que sobra na última linha; se a linha estiver cheia, some.
@@ -23,6 +23,7 @@
         if (f.bairro && d.bairro !== f.bairro) ok = false;
         if (f.tipo && d.tipo !== f.tipo) ok = false;
         if (f.ate && (!p || p > Number(f.ate))) ok = false;
+        if (f.de && (!p || p < Number(f.de))) ok = false;
         if (f.atalho && (" " + d.tags + " ").indexOf(" " + f.atalho + " ") < 0) ok = false;
         c.hidden = !ok; if (ok) n++;
       });
@@ -42,6 +43,7 @@
       if (f.atalho) partes.push(nomes[f.atalho]);
       if (f.bairro) partes.push(f.bairro);
       if (f.tipo) partes.push(f.tipo);
+      if (f.de) partes.push("a partir de " + Number(f.de).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }));
       if (f.ate) partes.push("até " + Number(f.ate).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }));
       ativo.hidden = !partes.length;
       ativo.querySelector("span").textContent = "Filtro: " + partes.join(" · ");
@@ -50,18 +52,18 @@
     var busca = document.getElementById("busca");
     busca.addEventListener("submit", function (e) {
       e.preventDefault();
-      f.bairro = busca.bairro.value; f.tipo = busca.tipo.value; f.ate = busca.ate.value; f.atalho = "";
+      f.bairro = busca.bairro.value; f.tipo = busca.tipo.value; f.ate = busca.ate.value; f.de = busca.de.value; f.atalho = "";
       aplicar(); ir();
     });
     document.querySelectorAll("[data-atalho]").forEach(function (b) {
       b.addEventListener("click", function () {
-        f = { bairro: "", tipo: "", ate: "", atalho: b.getAttribute("data-atalho"), ordem: f.ordem };
+        f = { bairro: "", tipo: "", de: "", ate: "", atalho: b.getAttribute("data-atalho"), ordem: f.ordem };
         busca.reset(); aplicar(); ir();
       });
     });
     document.getElementById("ordem").addEventListener("change", function (e) { f.ordem = e.target.value; aplicar(); });
     document.querySelectorAll("[data-limpar]").forEach(function (b) {
-      b.addEventListener("click", function () { f = { bairro: "", tipo: "", ate: "", atalho: "", ordem: f.ordem }; busca.reset(); aplicar(); });
+      b.addEventListener("click", function () { f = { bairro: "", tipo: "", de: "", ate: "", atalho: "", ordem: f.ordem }; busca.reset(); aplicar(); });
     });
     aplicar();
   }
